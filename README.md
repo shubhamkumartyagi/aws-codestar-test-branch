@@ -1,105 +1,23 @@
-Welcome to the AWS CodeStar sample web service
-==============================================
+# weatherAPP
+An app to display weather for a given zip code of a US city. There is a simple UI page which makes an ajax call to our rest controller to fetch minimum temperature for a given US zip code.
 
-This sample code helps get you started with a simple Java web service
-deployed by AWS Elastic Beanstalk and AWS CloudFormation.
+## About the project flow
+This project has a Spring controller to process request coming from UI.
+Then a business logic to process the request that is coming from the controller.
+There is an external REST API call to 'open weather' using netflix hystrix which also helps us understand third party calls handling.
 
-What's Here
------------
+## How to run
+1) Eclipse: You can import this project directly into your Eclipse under the name 'weatherAPP' and simply run as a Spring Boot application to get things working.
+Hit 'http:localhost:8080/index.html' and you are good to go. 
+2) Executable jar file: Run the package using maven by the following command: 'mvn install' in the main directory where your pom file is located and after the successful execution you should be able to find see jar in target folder.
 
-This sample includes:
-
-* README.md - this file
-* .ebextensions/ - this directory contains configuration files that
-  allows AWS Elastic Beanstalk to deploy your Java service
-* buildspec.yml - this file is used by AWS CodeBuild to build the web
-  service
-* pom.xml - this file is the Maven Project Object Model for the web service
-* src/main - this directory contains your Java service source files
-* src/test - this directory contains your Java service unit test files
-* template.yml - this file contains the description of AWS resources used by AWS
-  CloudFormation to deploy your infrastructure
+### Sample Request and Response
+![sample_request_response](https://user-images.githubusercontent.com/44669879/47965577-f7031980-e06e-11e8-8d66-5b08214dd49a.png)
 
 
-Getting Started
----------------
+#### Known issues:
+1) This application is well test using multiple zip code. But there may be a case that it does not work for the first time because of hystrix issue 'https://stackoverflow.com/questions/36071841/spring-cloud-hystrix-fails-at-first-command-call'.
+2) OpenWeatherMap API that is being used here to fetch weather may not respond as it does not guarantee 99% availability because of free usage. Try again if external API is not responding.
+3) Weather forecast from OpenWeatherMap API is not provided on a hourly instead they provide forecast of every three hours.
+So the sorting logic is not done on hourly basis instead on quaterly basis.
 
-These directions assume you want to develop on your local computer, and not
-from the Amazon EC2 instance itself. If you're on the Amazon EC2 instance, the
-virtual environment is already set up for you, and you can start working on the
-code.
-
-To work on the sample code, you'll need to clone your project's repository to your
-local computer. If you haven't, do that first. You can find instructions in the
-AWS CodeStar user guide.
-
-1. Install maven.  See https://maven.apache.org/install.html for details.
-
-2. Install tomcat.  See https://tomcat.apache.org/tomcat-8.0-doc/setup.html for
-   details.
-
-3. Build the service.
-
-        $ mvn -f pom.xml compile
-        $ mvn -f pom.xml package
-
-4. Copy the built service to the Tomcat webapp directory.  The actual
-   location of that directory will vary depending on your platform and
-   installation.
-
-        $ cp target/ROOT.war <tomcat webapp directory>
-
-4. Restart your tomcat server
-
-5. Open http://127.0.0.1:8080/ in a web browser to view your service.
-
-What Do I Do Next?
-------------------
-
-Once you have a virtual environment running, you can start making changes to
-the sample Java web service. We suggest making a small change to
-/src/main/java/com/aws/codestar/projecttemplates/controller/HelloWorldController.java
-first, so you can see how changes pushed to your project's repository are automatically
-picked up and deployed to the Amazon EC2 instance by AWS Elastic Beanstalk. (You can
-watch the progress on your project dashboard.) Once you've seen how that works, start
-developing your own code, and have fun!
-
-To run your tests locally, go to the root directory of the sample code and run the
-`mvn clean compile test` command, which AWS CodeBuild also runs through your `buildspec.yml` file.
-
-To test your new code during the release process, modify the existing tests or add tests
-to the tests directory. AWS CodeBuild will run the tests during the build stage of your
-project pipeline. You can find the test results in the AWS CodeBuild console.
-
-Learn more about Maven's [Standard Directory Layout](https://maven.apache.org/guides/introduction/introduction-to-the-standard-directory-layout.html).
-
-Learn more about AWS CodeBuild and how it builds and tests your application here:
-https://docs.aws.amazon.com/codebuild/latest/userguide/concepts.html
-
-Learn more about AWS CodeStar by reading the user guide.  Ask questions or make
-suggestions on our forum.
-
-User Guide: http://docs.aws.amazon.com/codestar/latest/userguide/welcome.html
-
-Forum: https://forums.aws.amazon.com/forum.jspa?forumID=248
-
-How Do I Add Template Resources to My Project?
-------------------
-
-To add AWS resources to your project, you'll need to edit the `template.yml`
-file in your project's repository. You may also need to modify permissions for
-your project's worker roles. After you push the template change, AWS CodeStar
-and AWS CloudFormation provision the resources for you.
-
-See the AWS CodeStar user guide for instructions to modify your template:
-https://docs.aws.amazon.com/codestar/latest/userguide/how-to-change-project#customize-project-template.html
-
-What Should I Do Before Running My Project in Production?
-------------------
-
-AWS recommends you review the security best practices recommended by the framework
-author of your selected sample application before running it in production. You
-should also regularly review and apply any available patches or associated security
-advisories for dependencies used within your application.
-
-Best Practices: https://docs.aws.amazon.com/codestar/latest/userguide/best-practices.html?icmpid=docs_acs_rm_sec
